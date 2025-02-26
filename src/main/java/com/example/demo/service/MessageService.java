@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.base.Message;
+import com.example.demo.entity.Message;
 import com.example.demo.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

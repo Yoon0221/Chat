@@ -1,6 +1,6 @@
 package com.example.demo.handler;
 
-import com.example.demo.entity.base.Message;
+import com.example.demo.entity.Message;
 import com.example.demo.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.WebSocketSession;
