@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>채팅방</title>
+</head>
+<body>
+<h1>채팅방</h1>
+<div id="messages"></div>  <!-- 메시지 표시 영역 -->
+<input type="text" id="messageInput" />  <!-- 메시지 입력 칸 -->
+<button onclick="sendMessage()">보내기</button>
+
+<script>
+    var socket = new WebSocket("ws://localhost:8080/chat");
+
+    // 메시지 수신 처리
+    socket.onmessage = function(event) {
+        var message = JSON.parse(event.data);
+        var messageContainer = document.getElementById("messages");
+        var messageElement = document.createElement("div");
+        messageElement.textContent = message.content;
+        messageContainer.appendChild(messageElement);
+    };
+
+    // 메시지 전송 처리
+    function sendMessage() {
+        var messageInput = document.getElementById("messageInput");
+        var message = {
+            content: messageInput.value
+        };
+        socket.send(JSON.stringify(message));  // 메시지 전송
+    }
+</script>
+</body>
+</html>
