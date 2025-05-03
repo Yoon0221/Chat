@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>채팅방 정보</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        .button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .participant-list {
+            margin-top: 20px;
+            list-style-type: none;
+            padding: 0;
+            text-align: left;
+        }
+        .participant-item {
+            padding: 5px;
+            border-bottom: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>채팅방 정보</h2>
+    <p><strong>채팅방 이름:</strong> <span id="chatRoomName"></span></p>
+
+    <h3>참여자 목록</h3>
+    <ul id="participantList" class="participant-list"></ul>
+
+    <button class="button" onclick="goBack()">뒤로 가기</button>
+</div>
+
+<script>
+    const chatRoomId = new URLSearchParams(window.location.search).get('chatRoomId'); // URL에서 채팅방 ID 가져오기
+
+    async function getChatRoomDetails() {
+        try {
+            const response = await fetch(`http://localhost:8080/chatroom/details/${chatRoomId}`);
+            const data = await response.json();
+
+            if (data.isSuccess) {
+                document.getElementById("chatRoomName").textContent = data.result.name;
+                const participantList = document.getElementById("participantList");
+
+                // 각 참여자의 이름과 userId를 올바르게 출력
+                data.result.participants.forEach(participant => {
+                    const li = document.createElement("li");
+                    li.classList.add("participant-item");
+                    li.textContent = `${participant.name} (${participant.userId})`; // name과 userId를 사용
+                    participantList.appendChild(li);
+                });
+
+            } else {
+                alert("채팅방 정보를 불러올 수 없습니다.");
+                window.location.href = "mypage.html";
+            }
+        } catch (error) {
+            alert("채팅방 정보 조회 중 오류가 발생했습니다.");
+        }
+    }
+
+    function goBack() {
+        window.location.href = "mypage.html";
+    }
+
+    getChatRoomDetails();  // 채팅방 정보 가져오기
+</script>
+</body>
+</html>

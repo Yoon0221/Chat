@@ -25,7 +25,13 @@ public enum SuccessStatus implements BaseCode {
     // 3. Yoon - 관리자 모드 관련 성공
     ADMIN_TURN_ADMIN(HttpStatus.OK, "ADMIN_2001", "관리자 모드로 변환에 성공하였습니다."),
     ADMIN_TURN_USER(HttpStatus.OK, "ADMIN_2002", "사용자 모드로 변환에 성공하였습니다."),
-    ADMIN_GET_ALL_USER(HttpStatus.OK, "ADMIN_2003", "모든 사용자를 조회하였습니다.")
+    ADMIN_GET_ALL_USER(HttpStatus.OK, "ADMIN_2003", "모든 사용자를 조회하였습니다."),
+
+    // 4. Yoon - 친구 목록 조회 관련 성공
+    FRIENDS_FETCH_SUCCESS(HttpStatus.OK, "FRIENDS_2001", "친구 목록 조회에 성공하였습니다."),
+
+    // 5. Yoon - 채팅방 관련 성공
+    CHATROOM_CREATE_SUCCESS(HttpStatus.OK, "CHATROOM_2001", "채팅방 생성에 성공하였습니다.")
 
 
     ;

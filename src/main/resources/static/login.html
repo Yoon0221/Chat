@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 페이지</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .response {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>로그인</h2>
+    <form id="loginForm">
+        <input type="text" id="userId" class="input-field" placeholder="아이디" required>
+        <input type="password" id="password" class="input-field" placeholder="비밀번호" required>
+        <button type="submit" class="button">로그인</button>
+    </form>
+
+    <div id="response" class="response" style="display: none;"></div>
+</div>
+
+<script>
+    document.getElementById('loginForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        // 폼 데이터 수집
+        const userId = document.getElementById('userId').value;
+        const password = document.getElementById('password').value;
+
+        try {
+            // API 호출
+            const response = await fetch(`http://localhost:8080/login?userId=${userId}&password=${password}`, {
+                method: 'POST',
+                headers: {
+                    'Accept': '*/*',
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const data = await response.json();
+
+            // 성공 응답 처리
+            if (data.isSuccess) {
+                // 로그인 성공 시, 사용자 정보를 URL로 전달
+                localStorage.setItem("userId", data.result.userId);
+                localStorage.setItem("name", data.result.name);
+
+                // myPage로 리디렉션
+                window.location.href = "myPage.html";
+            } else {
+                document.getElementById('response').style.display = 'block';
+                document.getElementById('response').innerHTML = `
+                        <strong>로그인 실패!</strong><br>
+                        오류 메시지: ${data.message}
+                    `;
+            }
+        } catch (error) {
+            document.getElementById('response').style.display = 'block';
+            document.getElementById('response').innerHTML = `
+                    <strong>에러 발생!</strong><br>
+                    오류 메시지: ${error.message}
+                `;
+        }
+    });
+</script>
+</body>
+</html>

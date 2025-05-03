@@ -35,8 +35,13 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 4. Yoon - 소셜 로그인 관련 에러
     OAUTH_LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "OAUTH_4001", "OAuth 로그인에 실패했습니다."),
-    OAUTH_PROCESSING_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "OAUTH_4002", "OAuth 로그인 처리에 실패했습니다.")
+    OAUTH_PROCESSING_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "OAUTH_4002", "OAuth 로그인 처리에 실패했습니다."),
 
+    // 5. Yoon - 로그인 관련 에러
+    LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "LOGIN_4001", "로그인에 실패했습니다."),
+
+    // 6. Yoon - 채팅방 관련 에러
+    CHATROOM_PARTICIPANTS_NOT_FOUND(HttpStatus.BAD_REQUEST, "CHATROOM_4001", "채팅방 생성에 실패했습니다.")
 
     ;
 
