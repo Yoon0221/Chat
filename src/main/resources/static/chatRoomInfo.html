@@ -50,6 +50,8 @@
     <h3>참여자 목록</h3>
     <ul id="participantList" class="participant-list"></ul>
 
+    <button class="button" onclick="enterChatRoom()">채팅방 입장하기</button>
+
     <button class="button" onclick="goBack()">뒤로 가기</button>
 </div>
 
@@ -80,6 +82,10 @@
         } catch (error) {
             alert("채팅방 정보 조회 중 오류가 발생했습니다.");
         }
+    }
+
+    function enterChatRoom() {
+        window.location.href = `chat.html?chatRoomId=${chatRoomId}`;
     }
 
     function goBack() {

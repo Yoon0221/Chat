@@ -36,14 +36,17 @@ dependencies {
 // swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0'
 
-// Spring Boot WebSocket
-	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
 // MongoDB 의존성
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 
 	// IntelliJ 내에서 사용할 프론트엔드 템플릿
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.webjars:sockjs-client:1.5.1'
+	implementation 'org.webjars:stomp-websocket:2.3.4'
+
 }
 
 tasks.named('test') {

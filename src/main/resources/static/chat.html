@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>지금입니다 - 채팅</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+</head>
+<body>
+<h2>채팅방: 지금입니다</h2>
+<p>참여자: user1, user3, user4</p>
+
+<div id="chat-box" style="border:1px solid #ccc; height:200px; overflow:auto;"></div>
+
+<input type="text" id="senderId" placeholder="ID 입력 (user1/user3/user4)" />
+<input type="text" id="message" placeholder="메시지 입력" />
+<button onclick="sendMessage()">전송</button>
+
+<script>
+    const roomId = "now";
+    let stompClient = null;
+
+    function connect() {
+        const socket = new SockJS("/ws");
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function () {
+            stompClient.subscribe("/sub/chat/room/" + roomId, function (message) {
+                const msg = JSON.parse(message.body);
+                const line = "[" + msg.senderId + "]: " + msg.content;
+                const chatBox = document.getElementById("chat-box");
+                chatBox.innerHTML += line + "<br/>";
+                chatBox.scrollTop = chatBox.scrollHeight;
+            });
+        });
+    }
+
+    function sendMessage() {
+        const senderId = document.getElementById("senderId").value;
+        const content = document.getElementById("message").value;
+        if (!senderId || !content) return;
+
+        const msg = {
+            roomId: roomId,
+            senderId: senderId,
+            content: content
+        };
+
+        stompClient.send("/pub/chat/send", {}, JSON.stringify(msg));
+        document.getElementById("message").value = "";
+    }
+
+    connect();
+</script>
+</body>
+</html>
