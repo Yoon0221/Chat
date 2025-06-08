@@ -1,5 +1,10 @@
 package com.example.demo.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class ChatMessage {
     private String roomId;
     private String senderId;
@@ -13,13 +18,5 @@ public class ChatMessage {
         this.senderId = senderId;
         this.content = content;
     }
-
-    public String getRoomId() { return roomId; }
-    public void setRoomId(String roomId) { this.roomId = roomId; }
-
-    public String getSenderId() { return senderId; }
-    public void setSenderId(String senderId) { this.senderId = senderId; }
-
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
+    
 }
