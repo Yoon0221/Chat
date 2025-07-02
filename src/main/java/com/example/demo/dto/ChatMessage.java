@@ -8,15 +8,17 @@ import lombok.Setter;
 public class ChatMessage {
     private String roomId;
     private String senderId;
+    private String senderName;
     private String content;
 
     // 기본 생성자
     public ChatMessage() {}
 
-    public ChatMessage(String roomId, String senderId, String content) {
+    public ChatMessage(String roomId, String senderId, String senderName, String content) {
         this.roomId = roomId;
         this.senderId = senderId;
+        this.senderName = senderName;
         this.content = content;
     }
-    
+
 }

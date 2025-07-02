@@ -32,8 +32,6 @@ public enum SuccessStatus implements BaseCode {
 
     // 5. Yoon - 채팅방 관련 성공
     CHATROOM_CREATE_SUCCESS(HttpStatus.OK, "CHATROOM_2001", "채팅방 생성에 성공하였습니다.")
-
-
     ;
 
 

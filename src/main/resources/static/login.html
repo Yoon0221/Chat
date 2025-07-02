@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>로그인 페이지</title>
     <style>
         body {
@@ -48,8 +48,8 @@
 <div class="container">
     <h2>로그인</h2>
     <form id="loginForm">
-        <input type="text" id="userId" class="input-field" placeholder="아이디" required>
-        <input type="password" id="password" class="input-field" placeholder="비밀번호" required>
+        <input type="text" id="userId" class="input-field" placeholder="아이디" required />
+        <input type="password" id="password" class="input-field" placeholder="비밀번호" required />
         <button type="submit" class="button">로그인</button>
     </form>
 
@@ -57,46 +57,40 @@
 </div>
 
 <script>
+    // 서버 IP와 포트 설정, 필요 시 변경하세요
+    const SERVER_IP = "localhost";  // 본인 IP로 변경
+    const SERVER_PORT = "8080";          // 서버 포트
+
     document.getElementById('loginForm').addEventListener('submit', async function (event) {
         event.preventDefault();
 
-        // 폼 데이터 수집
         const userId = document.getElementById('userId').value;
         const password = document.getElementById('password').value;
 
         try {
-            // API 호출
-            const response = await fetch(`http://localhost:8080/login?userId=${userId}&password=${password}`, {
-                method: 'POST',
-                headers: {
-                    'Accept': '*/*',
-                    'Content-Type': 'application/json',
-                },
+            // POST 요청 보내기, 쿼리 파라미터가 아닌 바디로 전달하는 게 더 안전하지만 서버 API에 맞춰 조정하세요.
+            const response = await fetch(`http://${SERVER_IP}:${SERVER_PORT}/login?userId=${encodeURIComponent(userId)}&password=${encodeURIComponent(password)}`, {
+                method: 'POST'
             });
 
             const data = await response.json();
 
-            // 성공 응답 처리
             if (data.isSuccess) {
-                // 로그인 성공 시, 사용자 정보를 URL로 전달
+                // 로그인 성공 시 사용자 정보 로컬 저장소에 저장
                 localStorage.setItem("userId", data.result.userId);
                 localStorage.setItem("name", data.result.name);
 
-                // myPage로 리디렉션
+                // 마이페이지로 이동
                 window.location.href = "myPage.html";
             } else {
-                document.getElementById('response').style.display = 'block';
-                document.getElementById('response').innerHTML = `
-                        <strong>로그인 실패!</strong><br>
-                        오류 메시지: ${data.message}
-                    `;
+                const resDiv = document.getElementById('response');
+                resDiv.style.display = 'block';
+                resDiv.innerHTML = `<strong>로그인 실패!</strong><br>오류 메시지: ${data.message}`;
             }
         } catch (error) {
-            document.getElementById('response').style.display = 'block';
-            document.getElementById('response').innerHTML = `
-                    <strong>에러 발생!</strong><br>
-                    오류 메시지: ${error.message}
-                `;
+            const resDiv = document.getElementById('response');
+            resDiv.style.display = 'block';
+            resDiv.innerHTML = `<strong>에러 발생!</strong><br>오류 메시지: ${error.message}`;
         }
     });
 </script>

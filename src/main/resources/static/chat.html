@@ -1,32 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>지금입니다 - 채팅</title>
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 </head>
 <body>
 <h2>채팅방: 지금입니다</h2>
-<p>참여자: user1, user3, user4</p>
+<p>참여자: <span id="participant-info"></span></p>
 
 <div id="chat-box" style="border:1px solid #ccc; height:200px; overflow:auto;"></div>
 
-<input type="text" id="senderId" placeholder="ID 입력 (user1/user3/user4)" />
 <input type="text" id="message" placeholder="메시지 입력" />
 <button onclick="sendMessage()">전송</button>
 
 <script>
-    const roomId = "now";
+    // 서버 IP와 포트, 필요 시 변경
+    const SERVER_IP = "localhost";  // 본인 IP로 변경하세요
+    const SERVER_PORT = "8080";      // 서버 포트
+
+    // URL에서 파라미터 읽기
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomId = urlParams.get("chatRoomId");
+    const senderId = urlParams.get("senderId");
+    const senderName = decodeURIComponent(urlParams.get("senderName"));
+
+    // 본인 이름과 아이디 표시
+    document.getElementById("participant-info").innerText = `${senderName} (${senderId})`;
+
     let stompClient = null;
 
     function connect() {
-        const socket = new SockJS("/ws");
+        const socket = new SockJS(`http://${SERVER_IP}:${SERVER_PORT}/ws`);
         stompClient = Stomp.over(socket);
+
         stompClient.connect({}, function () {
+            // 해당 채팅방 구독
             stompClient.subscribe("/sub/chat/room/" + roomId, function (message) {
                 const msg = JSON.parse(message.body);
-                const line = "[" + msg.senderId + "]: " + msg.content;
+                const displayName = msg.senderName + " (" + msg.senderId + ")";
+                const line = "[" + displayName + "]: " + msg.content;
+
                 const chatBox = document.getElementById("chat-box");
                 chatBox.innerHTML += line + "<br/>";
                 chatBox.scrollTop = chatBox.scrollHeight;
@@ -34,14 +49,15 @@
         });
     }
 
+    // 메시지 전송
     function sendMessage() {
-        const senderId = document.getElementById("senderId").value;
-        const content = document.getElementById("message").value;
-        if (!senderId || !content) return;
+        const content = document.getElementById("message").value.trim();
+        if (!content) return;
 
         const msg = {
             roomId: roomId,
             senderId: senderId,
+            senderName: senderName,
             content: content
         };
 
